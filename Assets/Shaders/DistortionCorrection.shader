@@ -90,7 +90,7 @@
 			fixed4 frag(v2f i) : SV_Target
 			{
 				fixed4 texcol = tex2D(_MainTex, i.uv);
-				return texcol * _Color;
+				return texcol.bgra * _Color;
 			}
 			ENDCG
 		}
