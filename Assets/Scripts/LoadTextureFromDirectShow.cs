@@ -24,11 +24,11 @@ public class LoadTextureFromDirectShow : MonoBehaviour {
     private IntPtr obj, rawImage;
     private Texture2D tex;
     private Material screen;
-    private int imageWidth, imageHeight;
+    public int 
+	imageWidth = 1920, 
+	imageHeight = 1080;
     // Use this for initialization
     void Start () {
-	imageWidth = 1920;
-        imageHeight = 1080;
         obj = _DirectShow_create();
         tex = new Texture2D(imageWidth, imageHeight, TextureFormat.RGB24, false);
         screen = GetComponent<Renderer>().material;
@@ -46,7 +46,7 @@ public class LoadTextureFromDirectShow : MonoBehaviour {
             tex.LoadRawTextureData(rawImage, imageWidth * imageHeight * 3);
             tex.Apply();
             screen.mainTexture = tex;
-
+            //screen.SetTexture(Shader.PropertyToID("_MainTex"), tex);
         }
     }
 }
