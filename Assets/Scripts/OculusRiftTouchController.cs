@@ -8,6 +8,30 @@ using System;
 using System.Runtime.InteropServices;
 
 using System.Text;
+public class Time {
+    uint nsec;
+    uint sec;
+}
+
+public class Header {
+        uint seq;
+	Time time;        
+        string frame_id;
+}
+
+public class Position {
+    double x, y, z;
+}
+public class Orientation{
+    double x, y, w, z;
+} 
+
+public class PoseStamped
+{
+    Header header;
+    Position position;
+    Orientation orientation;
+}
 
 public class OculusRiftTouchController : MonoBehaviour {
     [DllImport("ROSClient.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
