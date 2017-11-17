@@ -7,31 +7,6 @@ using System;
 // For DllImport.
 using System.Runtime.InteropServices;
 
-using System.Text;
-public class Time {
-    uint nsec;
-    uint sec;
-}
-
-public class Header {
-        uint seq;
-	Time time;        
-        string frame_id;
-}
-
-public class Position {
-    double x, y, z;
-}
-public class Orientation{
-    double x, y, w, z;
-} 
-
-public class PoseStamped
-{
-    Header header;
-    Position position;
-    Orientation orientation;
-}
 
 public class OculusRiftTouchController : MonoBehaviour {
     [DllImport("ROSClient.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
@@ -58,7 +33,7 @@ public class OculusRiftTouchController : MonoBehaviour {
     IntPtr ROSClient;
 	int[] buttons;
 	float[] axes;
-    string msg;	
+	string msg;	
 	// Use this for initialization
 	void Start () {
 		ROSClient = _ROSClient_init();
@@ -72,7 +47,7 @@ public class OculusRiftTouchController : MonoBehaviour {
 	void Update () {
 		OVRInput.Update(); // Has to be called at the beginning to interact with OVRInput.
         
-        // Retrieve buttons status
+		// Retrieve buttons status
 		buttons[0] = OVRInput.Get(OVRInput.Button.One) ? 1 : 0;
 		buttons[1] = OVRInput.Get(OVRInput.Button.Two) ? 1 : 0;
 		buttons[2] = OVRInput.Get(OVRInput.Button.Three) ? 1 : 0;
@@ -80,7 +55,7 @@ public class OculusRiftTouchController : MonoBehaviour {
 		buttons[9] = OVRInput.Get(OVRInput.Button.PrimaryThumbstick) ? 1 : 0;
 		buttons[10] = OVRInput.Get(OVRInput.Button.SecondaryThumbstick) ? 1 : 0;
         
-        // Retrieve axes status
+		// Retrieve axes status
 		Vector2 axisStickLeft = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick);
 		axes[0] = axisStickLeft.x;
 		axes[1] = axisStickLeft.y;
@@ -93,15 +68,17 @@ public class OculusRiftTouchController : MonoBehaviour {
 		
 		axes[5] = OVRInput.Get(OVRInput.Axis1D.SecondaryIndexTrigger);
         
-        // Send buttons and axes to ROS.	
+		// Send buttons and axes to ROS.	
 		_ROSClient_publish(ROSClient, buttons, 11, axes, 8);
         
-        // Read position from ROS.	
+		// Read position from ROS.	
 		if (_ROSClient_isMsgAvailable(ROSClient))
 		{
 		    msg = Marshal.PtrToStringAnsi(_ROSClient_getMsg(ROSClient));
+		    ROS.PoseStamped pose = new ROS.PoseStamped();
+		    JsonUtility.FromJsonOverwrite(msg, pose);
 		    _ROSClient_clearMsg(ROSClient);
-		    Debug.Log(msg); 
+		    Debug.Log(JsonUtility.ToJson(pose));
 		}
-    }
+	}
 }
