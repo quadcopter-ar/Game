@@ -7,19 +7,21 @@ using System;
 // For DllImport.
 using System.Runtime.InteropServices;
 
+using System.Text;
+
 
 public class OculusRiftTouchController : MonoBehaviour {
     [DllImport("ROSClient.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr _ROSClient_init();
+    public static extern IntPtr _ROSClient_init(IntPtr ip);
 
     [DllImport("ROSClient.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void _ROSClient_initPublisher(IntPtr client);
+    public static extern void _ROSClient_initPublisher(IntPtr client, IntPtr topic);
 
     [DllImport("ROSClient.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
     public static extern void _ROSClient_publish(IntPtr client, int[] buttons, int buttons_length, float[] axes, int axes_length);
 
     [DllImport("ROSClient.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void _ROSClient_initSubscriber(IntPtr client);
+    public static extern void _ROSClient_initSubscriber(IntPtr client, IntPtr topic);
 
     [DllImport("ROSClient.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool _ROSClient_isMsgAvailable(IntPtr client);
@@ -36,9 +38,9 @@ public class OculusRiftTouchController : MonoBehaviour {
 	string msg;	
 	// Use this for initialization
 	void Start () {
-		ROSClient = _ROSClient_init();
-		_ROSClient_initPublisher(ROSClient);//, new StringBuilder("hello"));
-		_ROSClient_initSubscriber(ROSClient);
+		ROSClient = _ROSClient_init(Marshal.StringToHGlobalAnsi("192.168.221.128"));
+		_ROSClient_initPublisher(ROSClient, Marshal.StringToHGlobalAnsi("joy1"));
+		_ROSClient_initSubscriber(ROSClient, Marshal.StringToHGlobalAnsi("pose1"));
 		buttons = new int[11];
 		axes = new float[8];
 	}
