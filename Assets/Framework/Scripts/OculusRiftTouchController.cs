@@ -35,14 +35,22 @@ public class OculusRiftTouchController : MonoBehaviour {
     IntPtr ROSClient;
 	int[] buttons;
 	float[] axes;
-	string msg;	
+	string msg;
+
+    public GameObject gameObject;
+    public float positionScale = 1.0f;
+    Quaternion quaternion;	
+
 	// Use this for initialization
 	void Start () {
-		ROSClient = _ROSClient_init(Marshal.StringToHGlobalAnsi("192.168.221.128"));
-		_ROSClient_initPublisher(ROSClient, Marshal.StringToHGlobalAnsi("joy1"));
-		_ROSClient_initSubscriber(ROSClient, Marshal.StringToHGlobalAnsi("pose1"));
+        ROSClient = _ROSClient_init(Marshal.StringToHGlobalAnsi("192.168.1.36"));
+        //ROSClient = _ROSClient_init(Marshal.StringToHGlobalAnsi("192.168.221.128"));
+		_ROSClient_initPublisher(ROSClient, Marshal.StringToHGlobalAnsi("joy"));
+		_ROSClient_initSubscriber(ROSClient, Marshal.StringToHGlobalAnsi("mavros/local_position/pose"));
 		buttons = new int[11];
 		axes = new float[8];
+		quaternion = new Quaternion();
+		
 	}
     
 	// Update is called once per frame
@@ -80,7 +88,19 @@ public class OculusRiftTouchController : MonoBehaviour {
 		    ROS.PoseStamped pose = new ROS.PoseStamped();
 		    JsonUtility.FromJsonOverwrite(msg, pose);
 		    _ROSClient_clearMsg(ROSClient);
-		    Debug.Log(JsonUtility.ToJson(pose));
-		}
+            Debug.Log(JsonUtility.ToJson(pose));
+
+            gameObject.transform.position = (
+                (new Vector3((float)pose.pose.position.x, (float)pose.pose.position.y, (float)pose.pose.position.z)) * positionScale
+		    );
+
+            gameObject.transform.rotation = new Quaternion(
+                (float)pose.pose.orientation.x, 
+                (float)pose.pose.orientation.y, 
+                (float)pose.pose.orientation.z, 
+                (float)pose.pose.orientation.w
+            );
+
+        }
 	}
 }

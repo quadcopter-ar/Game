@@ -15,7 +15,8 @@
 		videoHeight("Video Height", Float) = 1080
 		scale("scale", Float) = 0.7
 		_MainTex("Texture", 2D) = "white" { }
-		_Color("Main Color", Color) = (1,1,1,0.5)	
+		_Color("Main Color", Color) = (1,1,1,0.5)
+		_SwapRedAndGreen("Swap Red and Green Channel", Int) = 0
 	}
 
 	SubShader {
@@ -32,6 +33,7 @@
 
 			fixed4 _Color;
 			sampler2D _MainTex;
+			int _SwapRedAndGreen;
 			float k1, k2, p1, p2, k3, fx, fy, cx, cy;
 
 			float videoWidth, videoHeight;
@@ -90,7 +92,10 @@
 			fixed4 frag(v2f i) : SV_Target
 			{
 				fixed4 texcol = tex2D(_MainTex, i.uv);
-				return texcol.bgra * _Color;
+				if(_SwapRedAndGreen > 0)
+					return texcol.bgra * _Color;
+				else
+					return texcol.rgba * _Color;
 			}
 			ENDCG
 		}
