@@ -39,14 +39,17 @@ public class OculusRiftTouchController : MonoBehaviour {
 
     public GameObject gameObject;
     public float positionScale = 1.0f;
+    public string remoteIP = "192.168.1.175";
+    public string publishingTopic = "joy";
+    public string subscribingTopic = "mavros/local_position/pose"; 
     Quaternion quaternion;	
 
 	// Use this for initialization
 	void Start () {
-        ROSClient = _ROSClient_init(Marshal.StringToHGlobalAnsi("192.168.1.36"));
-        //ROSClient = _ROSClient_init(Marshal.StringToHGlobalAnsi("192.168.221.128"));
-		_ROSClient_initPublisher(ROSClient, Marshal.StringToHGlobalAnsi("joy"));
-		_ROSClient_initSubscriber(ROSClient, Marshal.StringToHGlobalAnsi("mavros/local_position/pose"));
+		ROSClient = _ROSClient_init(Marshal.StringToHGlobalAnsi(remoteIP));
+		//ROSClient = _ROSClient_init(Marshal.StringToHGlobalAnsi("192.168.221.128"));
+		_ROSClient_initPublisher(ROSClient, Marshal.StringToHGlobalAnsi(publishingTopic));
+		_ROSClient_initSubscriber(ROSClient, Marshal.StringToHGlobalAnsi(subscribingTopic));
 		buttons = new int[11];
 		axes = new float[8];
 		quaternion = new Quaternion();
