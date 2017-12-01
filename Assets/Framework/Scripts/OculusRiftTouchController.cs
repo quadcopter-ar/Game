@@ -37,23 +37,21 @@ public class OculusRiftTouchController : MonoBehaviour {
 	float[] axes;
 	string msg;
 
-    public GameObject gameObject;
-    public float positionScale = 1.0f;
-    public string remoteIP = "192.168.1.175";
-    public string publishingTopic = "joy";
-    public string subscribingTopic = "mavros/local_position/pose"; 
-    Quaternion quaternion;	
+        public GameObject gameObject;
+        public float positionScale = 1.0f;
+        public string remoteIP = "192.168.1.175";
+        public string publishingTopic = "joy";
+        public string subscribingTopic = "mavros/local_position/pose"; 
 
 	// Use this for initialization
 	void Start () {
+		Debug.Log("Connecting to ROS master at " + remoteIP);
 		ROSClient = _ROSClient_init(Marshal.StringToHGlobalAnsi(remoteIP));
-		//ROSClient = _ROSClient_init(Marshal.StringToHGlobalAnsi("192.168.221.128"));
+		Debug.Log("Connected");
 		_ROSClient_initPublisher(ROSClient, Marshal.StringToHGlobalAnsi(publishingTopic));
 		_ROSClient_initSubscriber(ROSClient, Marshal.StringToHGlobalAnsi(subscribingTopic));
 		buttons = new int[11];
 		axes = new float[8];
-		quaternion = new Quaternion();
-		
 	}
     
 	// Update is called once per frame
@@ -91,19 +89,11 @@ public class OculusRiftTouchController : MonoBehaviour {
 		    ROS.PoseStamped pose = new ROS.PoseStamped();
 		    JsonUtility.FromJsonOverwrite(msg, pose);
 		    _ROSClient_clearMsg(ROSClient);
-            Debug.Log(JsonUtility.ToJson(pose));
+		    Debug.Log(JsonUtility.ToJson(pose));
 
-            gameObject.transform.position = (
-                (new Vector3((float)pose.pose.position.x, (float)pose.pose.position.y, (float)pose.pose.position.z)) * positionScale
-		    );
+		    gameObject.transform.position = pose.pose.position.toYUp() * positionScale;
+		    gameObject.transform.eulerAngles = pose.pose.orientation.toYUp();
 
-            gameObject.transform.rotation = new Quaternion(
-                (float)pose.pose.orientation.x, 
-                (float)pose.pose.orientation.y, 
-                (float)pose.pose.orientation.z, 
-                (float)pose.pose.orientation.w
-            );
-
-        }
+		}
 	}
 }

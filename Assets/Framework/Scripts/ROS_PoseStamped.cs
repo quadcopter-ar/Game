@@ -1,5 +1,6 @@
 ﻿using System;
 
+// ROS coordinate system is Z-up.
 namespace ROS
 {
     [Serializable]
@@ -18,17 +19,31 @@ namespace ROS
     [Serializable]
     public class Position
     {
-        public double x;
-        public double y;
-        public double z;
+        public float x;
+        public float y;
+        public float z;
+	
+	public UnityEngine.Vector3 toYUp()
+        {
+	    // convert to Y-up coord. sys.
+            return new UnityEngine.Vector3(x, z, -y);
+        }
+
     }
     [Serializable]
     public class Orientation
     {
-        public double x;
-        public double y;
-        public double z;
-        public double w;
+        public float x;
+        public float y;
+        public float z;
+        public float w;
+	
+	// Returns the euler angles and with Y-up coordinate system in mind.
+	public UnityEngine.Vector3 toYUp()
+        {
+            UnityEngine.Vector3 euler = (new UnityEngine.Quaternion(x, y, z, w)).eulerAngles;
+            return new UnityEngine.Vector3(euler.x, euler.z, -euler.y); // convert to y-up.
+        }
     }
 
     [Serializable]
