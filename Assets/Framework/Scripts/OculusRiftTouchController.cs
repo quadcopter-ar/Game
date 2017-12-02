@@ -41,7 +41,7 @@ public class OculusRiftTouchController : MonoBehaviour {
         public float positionScale = 1.0f;
         public string remoteIP = "192.168.1.175";
         public string publishingTopic = "joy";
-        public string subscribingTopic = "mavros/local_position/pose"; 
+        public string subscribingTopic = "fiducial_pose"; 
 
 	// Use this for initialization
 	void Start () {
@@ -86,13 +86,13 @@ public class OculusRiftTouchController : MonoBehaviour {
 		if (_ROSClient_isMsgAvailable(ROSClient))
 		{
 		    msg = Marshal.PtrToStringAnsi(_ROSClient_getMsg(ROSClient));
-		    ROS.PoseStamped pose = new ROS.PoseStamped();
+		    ROS.Pose pose = new ROS.Pose();
 		    JsonUtility.FromJsonOverwrite(msg, pose);
 		    _ROSClient_clearMsg(ROSClient);
 		    Debug.Log(JsonUtility.ToJson(pose));
 
-		    gameObject.transform.position = pose.pose.position.toYUp() * positionScale;
-		    gameObject.transform.eulerAngles = pose.pose.orientation.toYUp();
+		    gameObject.transform.position = pose.position.toYUp() * positionScale;
+		    gameObject.transform.eulerAngles = pose.orientation.toYUp();
 
 		}
 	}
