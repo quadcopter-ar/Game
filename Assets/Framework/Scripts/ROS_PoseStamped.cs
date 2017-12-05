@@ -26,7 +26,9 @@ namespace ROS
 	public UnityEngine.Vector3 toYUp()
         {
 	    // convert to Y-up coord. sys.
-            return new UnityEngine.Vector3(x, z, -y);
+            //return new UnityEngine.Vector3(x, z, -y);
+            return new UnityEngine.Vector3(x, z, y);
+            
         }
 
     }
@@ -42,7 +44,10 @@ namespace ROS
 	public UnityEngine.Vector3 toYUp()
         {
             UnityEngine.Vector3 euler = (new UnityEngine.Quaternion(x, y, z, w)).eulerAngles;
-            return new UnityEngine.Vector3(euler.x, euler.z, -euler.y); // convert to y-up.
+            return new UnityEngine.Vector3(euler.x, -euler.z, euler.y); // convert to y-up.
+            //return new UnityEngine.Vector3(euler.x, euler.z, euler.y); // convert to y-up.
+                                                                       //return new UnityEngine.Vector3(euler.z, euler.x, euler.y); // convert to y-up.
+            //return UnityEngine.Vector3.zero;
         }
     }
 

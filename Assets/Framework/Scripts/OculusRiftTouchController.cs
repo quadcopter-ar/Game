@@ -21,7 +21,7 @@ public class OculusRiftTouchController : MonoBehaviour {
     public static extern void _ROSClient_publish(IntPtr client, int[] buttons, int buttons_length, float[] axes, int axes_length);
 
     [DllImport("ROSClient.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void _ROSClient_initSubscriber(IntPtr client, IntPtr topic);
+    public static extern void _ROSClient_initSubscriber(IntPtr client, IntPtr topic, bool sim);
 
     [DllImport("ROSClient.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool _ROSClient_isMsgAvailable(IntPtr client);
@@ -49,7 +49,7 @@ public class OculusRiftTouchController : MonoBehaviour {
 		ROSClient = _ROSClient_init(Marshal.StringToHGlobalAnsi(remoteIP));
 		Debug.Log("Connected");
 		_ROSClient_initPublisher(ROSClient, Marshal.StringToHGlobalAnsi(publishingTopic));
-		_ROSClient_initSubscriber(ROSClient, Marshal.StringToHGlobalAnsi(subscribingTopic));
+		_ROSClient_initSubscriber(ROSClient, Marshal.StringToHGlobalAnsi(subscribingTopic), false);
 		buttons = new int[11];
 		axes = new float[8];
 	}
