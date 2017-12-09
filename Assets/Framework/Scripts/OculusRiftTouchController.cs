@@ -93,7 +93,7 @@ public class OculusRiftTouchController : MonoBehaviour {
 		    Debug.Log(JsonUtility.ToJson(pose));
 
 		    gameObject.transform.position = Vector3.Scale(pose.position.toYUp(), positionScale);
-		    gameObject.transform.eulerAngles = pose.orientation.toYUp();
+		    //gameObject.transform.eulerAngles = pose.orientation.toYUp();
 
 		}
 	}
