@@ -38,10 +38,11 @@ public class OculusRiftTouchController : MonoBehaviour {
 	string msg;
 
         public GameObject gameObject;
-        public float positionScale = 1.0f;
-        public string remoteIP = "192.168.1.175";
+        public Vector3 positionScale;
+        public string remoteIP = "192.168.1.2";
         public string publishingTopic = "joy";
-        public string subscribingTopic = "fiducial_pose"; 
+        public string subscribingTopic = "fiducial_pose_corrected";
+        public bool isSimulation = false;
 
 	// Use this for initialization
 	void Start () {
@@ -49,7 +50,7 @@ public class OculusRiftTouchController : MonoBehaviour {
 		ROSClient = _ROSClient_init(Marshal.StringToHGlobalAnsi(remoteIP));
 		Debug.Log("Connected");
 		_ROSClient_initPublisher(ROSClient, Marshal.StringToHGlobalAnsi(publishingTopic));
-		_ROSClient_initSubscriber(ROSClient, Marshal.StringToHGlobalAnsi(subscribingTopic), false);
+		_ROSClient_initSubscriber(ROSClient, Marshal.StringToHGlobalAnsi(subscribingTopic), isSimulation);
 		buttons = new int[11];
 		axes = new float[8];
 	}
@@ -91,7 +92,7 @@ public class OculusRiftTouchController : MonoBehaviour {
 		    _ROSClient_clearMsg(ROSClient);
 		    Debug.Log(JsonUtility.ToJson(pose));
 
-		    gameObject.transform.position = pose.position.toYUp() * positionScale;
+		    gameObject.transform.position = Vector3.Scale(pose.position.toYUp(), positionScale);
 		    gameObject.transform.eulerAngles = pose.orientation.toYUp();
 
 		}
