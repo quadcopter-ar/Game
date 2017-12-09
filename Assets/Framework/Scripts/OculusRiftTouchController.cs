@@ -42,7 +42,8 @@ public class OculusRiftTouchController : MonoBehaviour {
         public string remoteIP = "192.168.1.2";
         public string publishingTopic = "joy";
         public string subscribingTopic = "fiducial_pose_corrected";
-        public bool isSimulation = false;
+        public bool isSimulation = false; // ROS simulation.
+        public bool enableRotation = false;
 
 	// Use this for initialization
 	void Start () {
@@ -93,8 +94,8 @@ public class OculusRiftTouchController : MonoBehaviour {
 		    Debug.Log(JsonUtility.ToJson(pose));
 
 		    gameObject.transform.position = Vector3.Scale(pose.position.toYUp(), positionScale);
-		    //gameObject.transform.eulerAngles = pose.orientation.toYUp();
-
+            if(enableRotation)
+		        gameObject.transform.eulerAngles = pose.orientation.toUnityCoordSys();
 		}
 	}
 }

@@ -41,18 +41,29 @@ namespace ROS
         public float z;
         public float w;
 	
-	// Returns the euler angles and with Y-up coordinate system in mind.
-	public UnityEngine.Vector3 toYUp()
+	    // Returns the euler angles for Unity.
+	    public UnityEngine.Vector3 toUnityCoordSys()
         {
+            // From ROS, the coordinate is in Right-hand-rule and Z-up.
             UnityEngine.Vector3 euler = (new UnityEngine.Quaternion(x, y, z, w)).eulerAngles;
-            Debug.Log(euler);
-            // https://stackoverflow.com/questions/31191752/right-handed-euler-angles-xyz-to-left-handed-euler-angles-xyz 
-            return new UnityEngine.Vector3(-euler.x, -euler.z -180 , -euler.y); // convert to y-up.
-            // - - +
+            // Debug.Log(euler);
+            // Ref: https://stackoverflow.com/questions/31191752/right-handed-euler-angles-xyz-to-left-handed-euler-angles-xyz 
 
-            //return new UnityEngine.Vector3(euler.x, euler.z, euler.y); // convert to y-up.
-            //return new UnityEngine.Vector3(euler.z, euler.x, euler.y); // convert to y-up.
-            //return UnityEngine.Vector3.zero;
+            // Unity uses Left-hand-rule and Y-up.
+            
+            // RHR to LHR
+            // z' = -z
+            // x' = -x
+            // y' = y
+            
+            // Z-up to Y-up
+            // P" = ROT_x(-90) * P'
+            // P" = [1 0 0; 0 0 1; 0 -1 0] * (x', y', z')
+            // P" = (x', z', -y') = (-x, -z, -y)
+
+            // Furthermore, the original angle around the up-axis is -180 in stationary pose.
+            // so (-x, -z - 180, -y)
+            return new UnityEngine.Vector3(-euler.x, -euler.z - 180 , -euler.y); 
         }
     }
 

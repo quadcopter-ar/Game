@@ -3,49 +3,58 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ScaleBasedOnObject : MonoBehaviour {
-	public GameObject gameObject;
+	public GameObject virtualRefObject;
+    [Tooltip("Not needed if Virtual Ref Object is provided")]
+    public Vector3 virtualRefObjectDimension;
 
-        // Dimensions
-	public Vector3 physicalBox, physicalDrone, virtualDrone;
-	public bool updateAtRuntime = false;
+    // Dimensions
+    public Vector3 physicalRefObjectDimension, physicalTargetObjectDimension;
 	private Transform tx;
+    private Bounds originalSize;
 
 
 	    void setVirtualBoxDim()
 	    {
-		Vector3 droneRatios;
-		if (gameObject == null)
+		Vector3 virtualPhysicalRatios;
+        Bounds bounds;
+
+        if (virtualRefObject != null)
 		{
-
-			droneRatios = new Vector3(
-				virtualDrone.x / physicalDrone.x,
-				virtualDrone.y / physicalDrone.y,
-				virtualDrone.z / physicalDrone.z
-			);
-
+            bounds = BoundingBox.getBounds(virtualRefObject);
+            virtualRefObjectDimension = bounds.extents * 2;
 		}
-		else
-		{
-			Bounds bounds = BoundingBox.getBounds(gameObject);
-			droneRatios = new Vector3(
-				bounds.extents.x * 2 / physicalDrone.x,
-				bounds.extents.y * 2 / physicalDrone.y,
-				bounds.extents.z * 2 / physicalDrone.z
-			);
-		}	
 
-		tx.localScale = Vector3.Scale(physicalBox, droneRatios);
+        virtualPhysicalRatios = new Vector3(
+				virtualRefObjectDimension.x / physicalRefObjectDimension.x,
+				virtualRefObjectDimension.y / physicalRefObjectDimension.y,
+				virtualRefObjectDimension.z / physicalRefObjectDimension.z
+		);
+
+
+		tx.localScale = Vector3.Scale(tx.localScale, Vector3.Scale(physicalTargetObjectDimension, virtualPhysicalRatios));
+    
 
 	    }
 	// Use this for initialization
 	void Start () {
-		tx = GetComponent<Transform>();
+        tx = GetComponent<Transform>();
+
+        // figure out the actual size in rendering unit of the current game object.
+        tx.localScale = Vector3.one;
+        originalSize = BoundingBox.getBounds(gameObject);
+        // scale down to 1 rendering unit (1 meter in physics engine)
+        tx.localScale = Vector3.Scale(tx.localScale, new Vector3(
+            1 / (originalSize.extents.x * 2),
+            1 / (originalSize.extents.y * 2),
+            1 / (originalSize.extents.z * 2)
+        ));
+        
 		setVirtualBoxDim();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (updateAtRuntime)
-		    setVirtualBoxDim();
+		//if (updateAtRuntime)
+		//    setVirtualBoxDim();
 	}
 }
