@@ -32,6 +32,9 @@ public class OculusRiftTouchController : MonoBehaviour {
     [DllImport("ROSClient.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
     public static extern void _ROSClient_clearMsg(IntPtr client);
 
+    [DllImport("ROSClient.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int _ROSClient_enableFilter(IntPtr client, int nTaps, double Fs, double Fx);
+
     IntPtr ROSClient;
 	int[] buttons;
 	float[] axes;
@@ -44,11 +47,15 @@ public class OculusRiftTouchController : MonoBehaviour {
         public string subscribingTopic = "fiducial_pose_corrected";
         public bool isSimulation = false; // ROS simulation.
         public bool enableRotation = false;
+	public bool enableFiltering = false;
+	public int nTaps = 51;
+	public double Fs = 44.1, Fx = 2.0;
 
 	// Use this for initialization
 	void Start () {
 		Debug.Log("Connecting to ROS master at " + remoteIP);
 		ROSClient = _ROSClient_init(Marshal.StringToHGlobalAnsi(remoteIP));
+		_ROSClient_enableFilter(ROSClient, nTaps, Fs, Fx);
 		Debug.Log("Connected");
 		_ROSClient_initPublisher(ROSClient, Marshal.StringToHGlobalAnsi(publishingTopic));
 		_ROSClient_initSubscriber(ROSClient, Marshal.StringToHGlobalAnsi(subscribingTopic), isSimulation);
@@ -94,7 +101,7 @@ public class OculusRiftTouchController : MonoBehaviour {
 		    Debug.Log(JsonUtility.ToJson(pose));
 
 		    gameObject.transform.position = Vector3.Scale(pose.position.toYUp(), positionScale);
-            if(enableRotation)
+		    if(enableRotation)
 		        gameObject.transform.eulerAngles = pose.orientation.toUnityCoordSys();
 		}
 	}
