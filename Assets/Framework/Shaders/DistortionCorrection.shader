@@ -16,7 +16,7 @@
 		scale("scale", Float) = 0.7
 		_MainTex("Texture", 2D) = "white" { }
 		_Color("Main Color", Color) = (1,1,1,0.5)
-		_SwapRedAndGreen("Swap Red and Green Channel", Int) = 0
+		_SwapRedAndGreen("Swap Red and Green Channel", Int) = 1
 	}
 
 	SubShader {

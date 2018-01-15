@@ -28,7 +28,9 @@ namespace ROS
         {
 	    // convert to Y-up coord. sys.
             //return new UnityEngine.Vector3(x, z, -y);
-            return new UnityEngine.Vector3(x, z, 0);
+            //return new UnityEngine.Vector3(x, z, 0);
+            return new UnityEngine.Vector3(x, z, y);
+
             
         }
 
