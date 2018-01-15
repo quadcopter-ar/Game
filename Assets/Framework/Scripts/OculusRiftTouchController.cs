@@ -55,7 +55,8 @@ public class OculusRiftTouchController : MonoBehaviour {
 	void Start () {
 		Debug.Log("Connecting to ROS master at " + remoteIP);
 		ROSClient = _ROSClient_init(Marshal.StringToHGlobalAnsi(remoteIP));
-		_ROSClient_enableFilter(ROSClient, nTaps, Fs, Fx);
+		if(enableFiltering)
+			_ROSClient_enableFilter(ROSClient, nTaps, Fs, Fx);
 		Debug.Log("Connected");
 		_ROSClient_initPublisher(ROSClient, Marshal.StringToHGlobalAnsi(publishingTopic));
 		_ROSClient_initSubscriber(ROSClient, Marshal.StringToHGlobalAnsi(subscribingTopic), isSimulation);
