@@ -9,7 +9,6 @@ using System.Runtime.InteropServices;
 
 using System.Text;
 
-
 public class OculusRiftTouchController : MonoBehaviour {
     [DllImport("ROSClient.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr _ROSClient_init(IntPtr ip);
@@ -33,7 +32,10 @@ public class OculusRiftTouchController : MonoBehaviour {
     public static extern void _ROSClient_clearMsg(IntPtr client);
 
     [DllImport("ROSClient.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int _ROSClient_enableFilter(IntPtr client, int nTaps, double Fs, double Fx);
+    public static extern int _ROSClient_initLowPassFilter(IntPtr client, int nTaps, double Fs, double Fx);
+
+    [DllImport("ROSClient.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int _ROSClient_initMyFilter(IntPtr client, double threshold);
 
     IntPtr ROSClient;
 	int[] buttons;
@@ -47,16 +49,21 @@ public class OculusRiftTouchController : MonoBehaviour {
         public string subscribingTopic = "fiducial_pose_corrected";
         public bool isSimulation = false; // ROS simulation.
         public bool enableRotation = false;
-	public bool enableFiltering = false;
+	public bool enableLowPassFilter= false;
 	public int nTaps = 51;
 	public double Fs = 44.1, Fx = 2.0;
+	public bool enableMyFilter = false;
+	public double threshold = 1;
 
 	// Use this for initialization
 	void Start () {
 		Debug.Log("Connecting to ROS master at " + remoteIP);
 		ROSClient = _ROSClient_init(Marshal.StringToHGlobalAnsi(remoteIP));
-		if(enableFiltering)
-			_ROSClient_enableFilter(ROSClient, nTaps, Fs, Fx);
+		if(enableLowPassFilter)
+		    _ROSClient_initLowPassFilter(ROSClient, nTaps, Fs, Fx);
+		if (enableMyFilter)
+		    _ROSClient_initMyFilter(ROSClient, threshold);
+
 		Debug.Log("Connected");
 		_ROSClient_initPublisher(ROSClient, Marshal.StringToHGlobalAnsi(publishingTopic));
 		_ROSClient_initSubscriber(ROSClient, Marshal.StringToHGlobalAnsi(subscribingTopic), isSimulation);
