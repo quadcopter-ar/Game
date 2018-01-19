@@ -35,7 +35,7 @@ public class OculusRiftTouchController : MonoBehaviour {
     public static extern int _ROSClient_initLowPassFilter(IntPtr client, int nTaps, double Fs, double Fx);
 
     [DllImport("ROSClient.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int _ROSClient_initMyFilter(IntPtr client, double threshold);
+    public static extern int _ROSClient_initMyFilter(IntPtr client, int bufferSize);
 
     IntPtr ROSClient;
 	int[] buttons;
@@ -53,7 +53,7 @@ public class OculusRiftTouchController : MonoBehaviour {
 	public int nTaps = 51;
 	public double Fs = 44.1, Fx = 2.0;
 	public bool enableMyFilter = false;
-	public double threshold = 1;
+	public int bufferSize = 5;
 
 	// Use this for initialization
 	void Start () {
@@ -62,8 +62,8 @@ public class OculusRiftTouchController : MonoBehaviour {
 		if(enableLowPassFilter)
 		    _ROSClient_initLowPassFilter(ROSClient, nTaps, Fs, Fx);
 		if (enableMyFilter)
-		    _ROSClient_initMyFilter(ROSClient, threshold);
-
+		    _ROSClient_initMyFilter(ROSClient, bufferSize);
+		
 		Debug.Log("Connected");
 		_ROSClient_initPublisher(ROSClient, Marshal.StringToHGlobalAnsi(publishingTopic));
 		_ROSClient_initSubscriber(ROSClient, Marshal.StringToHGlobalAnsi(subscribingTopic), isSimulation);
