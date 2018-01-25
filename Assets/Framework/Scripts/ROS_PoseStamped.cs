@@ -26,9 +26,15 @@ namespace ROS
 	
 	public UnityEngine.Vector3 toYUp()
         {
-	    // convert to Y-up coord. sys.
+            // convert to Y-up coord. sys.
             //return new UnityEngine.Vector3(x, z, -y);
             //return new UnityEngine.Vector3(x, z, 0);
+
+            // ROS change
+            float y_tmp = y;
+            y = x;
+            x = -y_tmp;
+	    	
             return new UnityEngine.Vector3(x, z, y);
 
             
@@ -47,7 +53,11 @@ namespace ROS
 	    public UnityEngine.Vector3 toUnityCoordSys()
         {
             // From ROS, the coordinate is in Right-hand-rule and Z-up.
-            UnityEngine.Vector3 euler = (new UnityEngine.Quaternion(x, y, z, w)).eulerAngles;
+            //UnityEngine.Vector3 euler = (new UnityEngine.Quaternion(x, y, z, w)).eulerAngles;
+	   
+	    // Change of orientation in ROS.	
+            UnityEngine.Vector3 euler = Quaternion.Euler(0, 0, -90) * (new UnityEngine.Quaternion(x, y, z, w)).eulerAngles;
+
             // Debug.Log(euler);
             // Ref: https://stackoverflow.com/questions/31191752/right-handed-euler-angles-xyz-to-left-handed-euler-angles-xyz 
 
