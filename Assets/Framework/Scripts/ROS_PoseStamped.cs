@@ -23,21 +23,24 @@ namespace ROS
         public float x;
         public float y;
         public float z;
+
+	public UnityEngine.Vector3 getROSAdjustedCoord()
+        {
+            // ROS change
+            float yNew = x;
+            float xNew = -y;
+            return new UnityEngine.Vector3(xNew, yNew, z);
+        }
 	
-	public UnityEngine.Vector3 toYUp()
+	public UnityEngine.Vector3 toYUp(UnityEngine.Vector3 pos)
         {
             // convert to Y-up coord. sys.
-            //return new UnityEngine.Vector3(x, z, -y);
-            //return new UnityEngine.Vector3(x, z, 0);
+            return new UnityEngine.Vector3(pos.x, pos.z, pos.y);
+        }
 
-            // ROS change
-            float y_tmp = y;
-            y = x;
-            x = -y_tmp;
-	    	
-            return new UnityEngine.Vector3(x, z, y);
-
-            
+        public UnityEngine.Vector3 toUnityCoordSys(UnityEngine.Vector3 scale)
+        {
+            return UnityEngine.Vector3.Scale(toYUp(getROSAdjustedCoord()), scale);
         }
 
     }

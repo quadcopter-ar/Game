@@ -10,34 +10,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 
 public class OculusRiftTouchController : MonoBehaviour {
-    [DllImport("ROSClient.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr _ROSClient_init(IntPtr ip);
-
-    [DllImport("ROSClient.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void _ROSClient_initPublisher(IntPtr client, IntPtr topic);
-
-    [DllImport("ROSClient.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void _ROSClient_publish(IntPtr client, int[] buttons, int buttons_length, float[] axes, int axes_length);
-
-    [DllImport("ROSClient.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void _ROSClient_initSubscriber(IntPtr client, IntPtr topic, bool sim);
-
-    [DllImport("ROSClient.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool _ROSClient_isMsgAvailable(IntPtr client);
-
-    [DllImport("ROSClient.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr _ROSClient_getMsg(IntPtr client);
-
-    [DllImport("ROSClient.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void _ROSClient_clearMsg(IntPtr client);
-
-    [DllImport("ROSClient.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int _ROSClient_initLowPassFilter(IntPtr client, int nTaps, double Fs, double Fx);
-
-    [DllImport("ROSClient.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int _ROSClient_initMyFilter(IntPtr client, int bufferSize);
-
-    IntPtr ROSClient;
+    ROSClient rosClient;
 	int[] buttons;
 	float[] axes;
 	string msg;
@@ -58,15 +31,13 @@ public class OculusRiftTouchController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		Debug.Log("Connecting to ROS master at " + remoteIP);
-		ROSClient = _ROSClient_init(Marshal.StringToHGlobalAnsi(remoteIP));
-		if(enableLowPassFilter)
-		    _ROSClient_initLowPassFilter(ROSClient, nTaps, Fs, Fx);
+		rosClient = new ROSClient(remoteIP);
 		if (enableMyFilter)
-		    _ROSClient_initMyFilter(ROSClient, bufferSize);
+		    rosClient.enableFilter(bufferSize); 
 		
 		Debug.Log("Connected");
-		_ROSClient_initPublisher(ROSClient, Marshal.StringToHGlobalAnsi(publishingTopic));
-		_ROSClient_initSubscriber(ROSClient, Marshal.StringToHGlobalAnsi(subscribingTopic), isSimulation);
+		rosClient.initSubscriber(subscribingTopic);
+        	rosClient.initPublisher(publishingTopic);
 		buttons = new int[11];
 		axes = new float[8];
 	}
@@ -97,18 +68,14 @@ public class OculusRiftTouchController : MonoBehaviour {
 		axes[5] = OVRInput.Get(OVRInput.Axis1D.SecondaryIndexTrigger);
         
 		// Send buttons and axes to ROS.	
-		_ROSClient_publish(ROSClient, buttons, 11, axes, 8);
+		rosClient.publish(buttons, 11, axes, 8);
         
 		// Read position from ROS.	
-		if (_ROSClient_isMsgAvailable(ROSClient))
+		if (rosClient.isPoseAvailable())
 		{
-		    msg = Marshal.PtrToStringAnsi(_ROSClient_getMsg(ROSClient));
-		    ROS.Pose pose = new ROS.Pose();
-		    JsonUtility.FromJsonOverwrite(msg, pose);
-		    _ROSClient_clearMsg(ROSClient);
+		    ROS.Pose pose = rosClient.getPose();
 		    Debug.Log(JsonUtility.ToJson(pose));
-
-		    gameObject.transform.position = Vector3.Scale(pose.position.toYUp(), positionScale);
+		    gameObject.transform.position = pose.position.toUnityCoordSys(positionScale);
 		    if(enableRotation)
 		        gameObject.transform.eulerAngles = pose.orientation.toUnityCoordSys();
 		}
