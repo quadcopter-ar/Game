@@ -76,8 +76,11 @@ public class OculusRiftTouchController : MonoBehaviour {
 		    ROS.Pose pose = rosClient.getPose();
 		    Debug.Log(JsonUtility.ToJson(pose));
 		    gameObject.transform.position = pose.position.toUnityCoordSys(positionScale);
-		    if(enableRotation)
-		        gameObject.transform.eulerAngles = pose.orientation.toUnityCoordSys();
+		    if (enableRotation)
+		    {
+			gameObject.transform.eulerAngles = pose.orientation.toUnityCoordSys();
+			Debug.Log("Euler: " + gameObject.transform.eulerAngles.ToString());
+		    }
 		}
 	}
 }
