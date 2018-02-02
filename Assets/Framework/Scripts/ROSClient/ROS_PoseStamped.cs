@@ -79,8 +79,10 @@ namespace ROS
 
             // Furthermore, the original angle around the up-axis is -180 in stationary pose.
             // so (-x, -z - 180, -y)
-            // return new UnityEngine.Vector3(-euler.x, -euler.z - 180 , -euler.y);
-            return new UnityEngine.Vector3(-euler.x, -euler.z  , -euler.y);
+            //return new UnityEngine.Vector3(-euler.x, -euler.z - 180 , -euler.y);
+            //return new UnityEngine.Vector3(-euler.x, -euler.z  , -euler.y);
+            return new UnityEngine.Vector3(euler.y, -euler.z  , -euler.x);
+	    
         }
     }
 
