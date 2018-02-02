@@ -74,8 +74,8 @@ public class Paddle : NetworkBehaviour {
 		{
 			Debug.Log("Connecting to ROS master at " + remoteIP);
 			rosClient = new ROSClient(remoteIP);
-			if (enableMyFilter)
-				rosClient.enableFilter(bufferSize);
+			//if (enableMyFilter)
+			//	rosClient.enableFilter(bufferSize);
 
 			Debug.Log("Connected");
 			rosClient.initSubscriber(subscribingTopic);
@@ -135,7 +135,7 @@ public class Paddle : NetworkBehaviour {
 			axes[5] = OVRInput.Get(OVRInput.Axis1D.SecondaryIndexTrigger);
 
 			// Send buttons and axes to ROS.	
-			rosClient.publish(buttons, 11, axes, 8);
+			// rosClient.publish(buttons, 11, axes, 8);
 
 			// Read position from ROS.	
 			if (rosClient.isPoseAvailable())
@@ -143,14 +143,14 @@ public class Paddle : NetworkBehaviour {
 				ROS.Pose pose = rosClient.getPose();
 				Debug.Log(JsonUtility.ToJson(pose));
 				gameObject.transform.position = pose.position.toUnityCoordSys(positionScale);
+				gameObject.transform.position += positionOffset;
 				if (enableRotation)
 				{
 					gameObject.transform.eulerAngles = pose.orientation.toUnityCoordSys();
 					Debug.Log("Euler: " + gameObject.transform.eulerAngles.ToString());
+					gameObject.transform.eulerAngles += orientationOffset;
 				}
 			}
-			gameObject.transform.position += positionOffset;
-			gameObject.transform.eulerAngles += orientationOffset;
 		}
 	}
 
@@ -175,6 +175,7 @@ public class Paddle : NetworkBehaviour {
 		transform.Translate (Input.GetAxis ("Horizontal") * speed * Time.deltaTime, Input.GetAxis ("Vertical") * speed * Time.deltaTime, 0f);
 		MinimapControl();
 		ROSControl();
+		
 		CameraControl();
 	}
 }
