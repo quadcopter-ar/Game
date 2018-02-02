@@ -15,7 +15,7 @@ public class OculusRiftTouchController : MonoBehaviour {
 	float[] axes;
 	string msg;
 
-        public GameObject gameObject;
+        //public GameObject gameObject = ;
         public Vector3 positionScale;
         public string remoteIP = "192.168.1.2";
         public string publishingTopic = "joy";
@@ -41,7 +41,7 @@ public class OculusRiftTouchController : MonoBehaviour {
 		buttons = new int[11];
 		axes = new float[8];
 	}
-    
+
 	// Update is called once per frame
 	void Update () {
 		OVRInput.Update(); // Has to be called at the beginning to interact with OVRInput.

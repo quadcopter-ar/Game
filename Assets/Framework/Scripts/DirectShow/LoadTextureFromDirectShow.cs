@@ -9,16 +9,16 @@ using System;
 using System.Runtime.InteropServices;
 
 public class LoadTextureFromDirectShow : MonoBehaviour {
-    [DllImport("DirectShowDLL.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport("DirectShowDLL", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr _DirectShow_create();
 
-    [DllImport("DirectShowDLL.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport("DirectShowDLL", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool _DirectShow_isFrameBufferAvailable(IntPtr obj);
 
-    [DllImport("DirectShowDLL.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport("DirectShowDLL", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr _DirectShow_getFrameBuffer(IntPtr obj);
 
-    [DllImport("DirectShowDLL.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport("DirectShowDLL", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
     public static extern void _DirectShow_clearFrameBuffer(IntPtr obj);
 
     private IntPtr obj, rawImage;

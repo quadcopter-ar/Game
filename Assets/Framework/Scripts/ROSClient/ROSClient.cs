@@ -7,31 +7,31 @@ using UnityEngine;
 
 public class ROSClient
 {
-    [DllImport("ROSClient.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport("ROSClient", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr _ROSClient_init(IntPtr ip);
 
-    [DllImport("ROSClient.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport("ROSClient", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
     public static extern void _ROSClient_initPublisher(IntPtr client, IntPtr topic);
 
-    [DllImport("ROSClient.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport("ROSClient", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
     public static extern void _ROSClient_publish(IntPtr client, int[] buttons, int buttons_length, float[] axes, int axes_length);
 
-    [DllImport("ROSClient.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport("ROSClient", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
     public static extern void _ROSClient_initSubscriber(IntPtr client, IntPtr topic, bool sim);
 
-    [DllImport("ROSClient.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport("ROSClient", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool _ROSClient_isMsgAvailable(IntPtr client);
 
-    [DllImport("ROSClient.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport("ROSClient", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr _ROSClient_getMsg(IntPtr client);
 
-    [DllImport("ROSClient.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport("ROSClient", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
     public static extern void _ROSClient_clearMsg(IntPtr client);
 
-    [DllImport("ROSClient.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport("ROSClient", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
     public static extern int _ROSClient_initLowPassFilter(IntPtr client, int nTaps, double Fs, double Fx);
 
-    [DllImport("ROSClient.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport("ROSClient", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
     public static extern int _ROSClient_initMyFilter(IntPtr client, int bufferSize);
 
     IntPtr p_mROSClient;
