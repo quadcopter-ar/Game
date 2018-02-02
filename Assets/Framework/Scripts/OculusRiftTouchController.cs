@@ -15,7 +15,7 @@ public class OculusRiftTouchController : MonoBehaviour {
 	float[] axes;
 	string msg;
 
-        //public GameObject gameObject = ;
+	public GameObject gameObject;
         public Vector3 positionScale;
         public string remoteIP = "192.168.1.2";
         public string publishingTopic = "joy";

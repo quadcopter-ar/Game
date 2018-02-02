@@ -74,8 +74,8 @@ public class Paddle : NetworkBehaviour {
 		{
 			Debug.Log("Connecting to ROS master at " + remoteIP);
 			rosClient = new ROSClient(remoteIP);
-			//if (enableMyFilter)
-			//	rosClient.enableFilter(bufferSize);
+			if (enableMyFilter)
+				rosClient.enableFilter(bufferSize);
 
 			Debug.Log("Connected");
 			rosClient.initSubscriber(subscribingTopic);
