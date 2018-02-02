@@ -1,0 +1,168 @@
+fileFormatVersion: 2
+guid: eab94ece3397f6a4da2c3a6104842707
+timeCreated: 1517029690
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Cockpit1
+    100004: Cockpit2
+    100006: Cockpit3
+    100008: Cockpit4
+    100010: Cockpit5
+    100012: group
+    100014: group1
+    100016: group2
+    100018: imagePlane1
+    100020: nurbsCube1
+    100022: pasted__group
+    100024: pasted__nurbsPlane1
+    100026: pasted__pasted__Cockpit1
+    100028: pasted__Windows1
+    100030: pCube1
+    100032: pCube2
+    100034: pCube3
+    100036: pPlane1
+    100038: pSphere1
+    100040: pSphere2
+    100042: pSphere3
+    100044: pSphere4
+    100046: pSphere5
+    100048: pSphere6
+    100050: pTorus1
+    100052: transform1
+    100054: transform10
+    100056: transform11
+    100058: transform12
+    100060: transform13
+    100062: transform14
+    100064: transform15
+    100066: transform16
+    100068: transform2
+    100070: transform3
+    100072: transform4
+    100074: transform5
+    100076: transform6
+    100078: transform7
+    100080: transform8
+    100082: transform9
+    400000: //RootNode
+    400002: Cockpit1
+    400004: Cockpit2
+    400006: Cockpit3
+    400008: Cockpit4
+    400010: Cockpit5
+    400012: group
+    400014: group1
+    400016: group2
+    400018: imagePlane1
+    400020: nurbsCube1
+    400022: pasted__group
+    400024: pasted__nurbsPlane1
+    400026: pasted__pasted__Cockpit1
+    400028: pasted__Windows1
+    400030: pCube1
+    400032: pCube2
+    400034: pCube3
+    400036: pPlane1
+    400038: pSphere1
+    400040: pSphere2
+    400042: pSphere3
+    400044: pSphere4
+    400046: pSphere5
+    400048: pSphere6
+    400050: pTorus1
+    400052: transform1
+    400054: transform10
+    400056: transform11
+    400058: transform12
+    400060: transform13
+    400062: transform14
+    400064: transform15
+    400066: transform16
+    400068: transform2
+    400070: transform3
+    400072: transform4
+    400074: transform5
+    400076: transform6
+    400078: transform7
+    400080: transform8
+    400082: transform9
+    2300000: Cockpit5
+    2300002: pPlane1
+    3300000: Cockpit5
+    3300002: pPlane1
+    4300000: pPlane1
+    4300002: Cockpit5
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
