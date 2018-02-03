@@ -17,7 +17,7 @@ public class Paddle : NetworkBehaviour {
 	[Header("ROS")]
 	public bool useROS = false;
 	public Vector3 positionScale;
-	public string remoteIP = "192.168.1.2";
+	public string remoteIP = "192.168.1.116";
 	public string publishingTopic = "joy";
 	public string subscribingTopic = "fiducial_pose_corrected";
 	public bool isSimulation = false; // ROS simulation.
@@ -135,7 +135,7 @@ public class Paddle : NetworkBehaviour {
 			axes[5] = OVRInput.Get(OVRInput.Axis1D.SecondaryIndexTrigger);
 
 			// Send buttons and axes to ROS.	
-			// rosClient.publish(buttons, 11, axes, 8);
+			rosClient.publish(buttons, 11, axes, 8);
 
 			// Read position from ROS.	
 			if (rosClient.isPoseAvailable())
