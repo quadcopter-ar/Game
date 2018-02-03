@@ -43,9 +43,9 @@ public class Paddle : NetworkBehaviour {
 		rot.eulerAngles = new Vector3(0.0f, 0.0f, 0.0f);
 		Vector3 ballPos = (GameObject.Find("StartPos1").GetComponent<Transform>().position + GameObject.Find("StartPos2").GetComponent<Transform>().position) / 2.0f;
 		var ball = (GameObject)Instantiate(ballprefab, ballPos, rot);
-		float sx = 1.0f;
+		float sx = 0.0f;
 		float sy = 0.0f;
-		float sz = 0.0f;
+		float sz = -1.0f;
 		//float sz = 0.0f;
 		//float sy = Random.Range (0, 2) == 0 ? -1 : 1;
 		//float sz = -3.0f;
@@ -162,7 +162,12 @@ public class Paddle : NetworkBehaviour {
 				ROS.Pose pose = rosClient.getPose();
 				Debug.Log(JsonUtility.ToJson(pose));
 				gameObject.transform.position = pose.position.toUnityCoordSys(positionScale);
-				gameObject.transform.position += positionOffset;
+				if (isServer) gameObject.transform.position += positionOffset;
+				else
+				{
+					Vector3 pos = gameObject.transform.position;
+					gameObject.transform.position = new Vector3(-pos.x, pos.y, -pos.z) + positionOffset;
+				}
 				if (enableRotation)
 				{
 					gameObject.transform.eulerAngles = pose.orientation.toUnityCoordSys();
