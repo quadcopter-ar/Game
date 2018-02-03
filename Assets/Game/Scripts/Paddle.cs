@@ -68,16 +68,16 @@ public class Paddle : NetworkBehaviour {
 		/*adjust two minimaps*/
 		var minimapp = gameObject.transform.Find("Plane").gameObject;
 		Vector3 scale1 = minimapp.transform.localScale;
-		var minimapSide = gameObject.transform.Find("Plane2").gameObject;
-		Vector3 scale2 = minimapSide.transform.localScale;
+		//var minimapSide = gameObject.transform.Find("Plane2").gameObject;
+		//Vector3 scale2 = minimapSide.transform.localScale;
 		float ratio = GameObject.Find("MinimapPlane").transform.localScale.x / GameObject.Find("MinimapPlane").transform.localScale.z;
 		if (ratio < 1) minimapp.transform.localScale = new Vector3(scale1.x, scale1.y, scale1.z * ratio);
 		else minimapp.transform.localScale = new Vector3(scale1.x / ratio, scale1.y, scale1.z);
 		Debug.Log(ratio);
 
-		float ratio2 = GameObject.Find("MinimapSidePlane").transform.localScale.x / GameObject.Find("MinimapSidePlane").transform.localScale.z;
-		if (ratio < 1) minimapSide.transform.localScale = new Vector3(scale2.x, scale2.y, scale2.z * ratio);
-		else minimapSide.transform.localScale = new Vector3(scale2.x / ratio, scale2.y, scale2.z);
+		//float ratio2 = GameObject.Find("MinimapSidePlane").transform.localScale.x / GameObject.Find("MinimapSidePlane").transform.localScale.z;
+		//if (ratio < 1) minimapSide.transform.localScale = new Vector3(scale2.x, scale2.y, scale2.z * ratio);
+		//else minimapSide.transform.localScale = new Vector3(scale2.x / ratio, scale2.y, scale2.z);
 
 
 		if (useROS)
@@ -109,16 +109,16 @@ public class Paddle : NetworkBehaviour {
 		{
 			GameObject.Find("MyDrone").GetComponent<Transform>().position = new Vector3(1.0f, centerPos.y / 3, centerPos.z / 3 - 100.0f);
 			GameObject.Find("BallIndicator").GetComponent<Transform>().position = new Vector3(0.0f, ballPos.y / 3, ballPos.z / 3 - 100.0f);
-			GameObject.Find("DroneSideView").GetComponent<Transform>().position = new Vector3(1.0f, centerPos.y / 3, centerPos.x / 3 - 200.0f);
-			GameObject.Find("BallSideView").GetComponent<Transform>().position = new Vector3(0.0f, ballPos.y / 3, ballPos.x / 3 - 200.0f);
+			//GameObject.Find("DroneSideView").GetComponent<Transform>().position = new Vector3(1.0f, centerPos.y / 3, centerPos.x / 3 - 200.0f);
+			//GameObject.Find("BallSideView").GetComponent<Transform>().position = new Vector3(0.0f, ballPos.y / 3, ballPos.x / 3 - 200.0f);
 
 		}
 		else
 		{
 			GameObject.Find("MyDrone").GetComponent<Transform>().position = new Vector3(1.0f, centerPos.y / 3, -centerPos.z / 3 - 100.0f);
 			GameObject.Find("BallIndicator").GetComponent<Transform>().position = new Vector3(0.0f, ballPos.y / 3, -ballPos.z / 3 - 100.0f);
-			GameObject.Find("DroneSideView").GetComponent<Transform>().position = new Vector3(1.0f, centerPos.y / 3, centerPos.x / 3 - 200.0f);
-			GameObject.Find("BallSideView").GetComponent<Transform>().position = new Vector3(1.0f, ballPos.y / 3, ballPos.x / 3 - 200.0f);
+			//GameObject.Find("DroneSideView").GetComponent<Transform>().position = new Vector3(1.0f, centerPos.y / 3, centerPos.x / 3 - 200.0f);
+			//GameObject.Find("BallSideView").GetComponent<Transform>().position = new Vector3(1.0f, ballPos.y / 3, ballPos.x / 3 - 200.0f);
 
 		}
 
