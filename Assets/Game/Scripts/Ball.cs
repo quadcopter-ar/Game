@@ -39,7 +39,9 @@ public class Ball : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-
+		//Debug.Log(gameObject.GetComponent<Rigidbody>().velocity.magnitude);
+		//Vector3 v = gameObject.GetComponent<Rigidbody>().velocity;
+		//gameObject.GetComponent<Rigidbody>().velocity = v.normalized * speed;
 	}
 
 	void OnTriggerEnter(Collider other)
@@ -48,7 +50,7 @@ public class Ball : MonoBehaviour {
 		if(other.gameObject.CompareTag ("goal1")) 
 		{
 			
-			count1 = count1 + 1;
+			//count1 = count1 + 1;
 			GetComponent<Rigidbody> ().position = Vector3.zero;
 			//SetCountText ();
 
@@ -59,14 +61,29 @@ public class Ball : MonoBehaviour {
 			GetComponent<Rigidbody> ().position = Vector3.zero;
 		}
 		source.PlayOneShot(goalSound, vol);
-
+		float sx = Random.Range(-1.0f, 1.0f);
+		float sy = Random.Range(-(float)System.Math.Sqrt(1-sx*sx), (float)System.Math.Sqrt(1 - sx * sx));
+		//float sz = Random.Range(-0.5f, 0.5f);
+		float sz = ((Random.Range(0.0f, 1.0f)>0.5f)?-1.0f:1.0f) *(float)System.Math.Sqrt(1 - sx * sx - sy * sy);
+		//float sx = 1.0f;
+		//float sy = 1.0f;
+		//float sz = -1.0f;
+		gameObject.GetComponent<Rigidbody>().velocity = new Vector3(speed * sx, speed * sy, speed * sz);
 	}
 
 	private void OnCollisionEnter(Collision collision)
 	{
+		//Debug.Log(gameObject.GetComponent<Rigidbody>().velocity.magnitude);
+		//Debug.Log(gameObject.GetComponent<Rigidbody>().velocity.magnitude);
+		Debug.Log(gameObject.GetComponent<Rigidbody>().velocity);
 		if (collision.collider.gameObject.CompareTag("wall")) source.PlayOneShot(wallSound, vol);
 		if (collision.collider.gameObject.CompareTag("paddle")) source.PlayOneShot(paddleSound, vol);
 	}
+	private void OnCollisionExit(Collision collision)
+	{
+
+	}
+
 
 	//void SetCountText ()
 	//{
