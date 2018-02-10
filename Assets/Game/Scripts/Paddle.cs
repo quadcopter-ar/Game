@@ -7,15 +7,20 @@ public class Paddle : NetworkBehaviour {
 
 	//public bool isPaddle1;
 	/*ROS Client*/
-	
+	private SceneConfiguration config;
 	ROSClient rosClient;
 	int[] buttons;
 	float[] axes;
 	string msg;
 
+	/*[Header("Config")]
+	public bool useROS = false;
+	public bool seeOpponent = true;
+	public bool singlePlayer = false;
+	[Range(0.0f, 1.0f)]
+	public float videoDistance = 1.0f;
 	//public GameObject gameObject = ;
 	[Header("ROS")]
-	public bool useROS = false;
 	public Vector3 positionScale;
 	public string remoteIP = "192.168.1.116";
 	public string publishingTopic = "joy";
@@ -26,22 +31,29 @@ public class Paddle : NetworkBehaviour {
 	public int nTaps = 51;
 	public double Fs = 44.1, Fx = 2.0;
 	public bool enableMyFilter = false;
-	public int bufferSize = 5;
+	public int bufferSize = 5;*/
 
 	/*Game*/
 	Vector3 positionOffset;
 	Vector3 orientationOffset;
-	[Header("Game")]
-	public float speed = 1f;
+	/*[Header("Game")]
+	public float speed = 1f;*/
+	[Range(0.0f, 1.0f)]
+	public float colliderDist = 0.1f;
 	public GameObject ballprefab;
 	[SyncVar]
 	public bool ready = false;
+
+	private Vector3 scale1;
+	private Vector3 scale2;
 
 	[Command]
 	void CmdSpawnBall() {
 		Quaternion rot = new Quaternion();
 		rot.eulerAngles = new Vector3(0.0f, 0.0f, 0.0f);
-		Vector3 ballPos = (GameObject.Find("StartPos1").GetComponent<Transform>().position + GameObject.Find("StartPos2").GetComponent<Transform>().position) / 2.0f;
+		Vector3 Pos = (GameObject.Find("StartPos1").GetComponent<Transform>().position + GameObject.Find("StartPos2").GetComponent<Transform>().position) / 2.0f;
+		Vector3 ballPos = new Vector3(Pos.x, Pos.y+0.2f, Pos.z);
+
 		var ball = (GameObject)Instantiate(ballprefab, ballPos, rot);
 		float sx = 0.0f;
 		float sy = 0.0f;
@@ -49,50 +61,79 @@ public class Paddle : NetworkBehaviour {
 		//float sx = Random.Range(-0.5f, 0.5f);
 		//float sy = Random.Range(-0.5f, 0.5f);
 		//float sz = Random.Range(-0.5f, 0.5f);
-		ball.GetComponent<Rigidbody> ().velocity = new Vector3 (speed * sx, speed * sy, speed * sz);
+		ball.GetComponent<Rigidbody> ().velocity = new Vector3 (config.speed * sx, config.speed * sy, config.speed * sz);
 		NetworkServer.Spawn (ball);
 	}
 
 	public override void OnStartClient() {
-		//if (!isServer)
-		//{
+		config = GameObject.Find("Config").GetComponent<SceneConfiguration>();
+		if (!isServer || config.singlePlayer)
+		{
 			Debug.Log("TEst");
 			ready = true;
-		//}
-
+		}
 	}
 
 	void Start() 
 	{
+		if (!config.seeOpponent && !isLocalPlayer) gameObject.transform.Find("cockpit.785").gameObject.SetActive(false);
 		if (!isLocalPlayer) return;
 		/*adjust two minimaps*/
 		var minimapp = gameObject.transform.Find("Plane").gameObject;
-		Vector3 scale1 = minimapp.transform.localScale;
+		scale1 = minimapp.transform.localScale;
 		var minimapSide = gameObject.transform.Find("Plane2").gameObject;
-		Vector3 scale2 = minimapSide.transform.localScale;
+		scale2 = minimapSide.transform.localScale;
+		//float x = GameObject.Find("MinimapPlane").transform.localScale.x;
+		//float z = GameObject.Find("MinimapPlane").transform.localScale.z;
+		//minimapp.transform.localScale = new Vector3(scale1.x * z * 5.0f, scale1.y, scale1.z * x * 5.0f);
+
+		//x = GameObject.Find("MinimapSidePlane").transform.localScale.x;
+		//z = GameObject.Find("MinimapSidePlane").transform.localScale.z;
+		//minimapSide.transform.localScale = new Vector3(scale1.x * z * 5.0f, scale1.y, scale1.z * x * 5.0f);
+
+
 		float ratio = GameObject.Find("MinimapPlane").transform.localScale.x / GameObject.Find("MinimapPlane").transform.localScale.z;
 		if (ratio < 1) minimapp.transform.localScale = new Vector3(scale1.x, scale1.y, scale1.z * ratio);
 		else minimapp.transform.localScale = new Vector3(scale1.x / ratio, scale1.y, scale1.z);
-		Debug.Log(ratio);
-
+		//Debug.Log(ratio);
 		float ratio2 = GameObject.Find("MinimapSidePlane").transform.localScale.x / GameObject.Find("MinimapSidePlane").transform.localScale.z;
 		if (ratio2 < 1) minimapSide.transform.localScale = new Vector3(scale2.x, scale2.y, scale2.z * ratio2);
 		else minimapSide.transform.localScale = new Vector3(scale2.x / ratio2, scale2.y, scale2.z);
-		Debug.Log(ratio2);
+		//Debug.Log(ratio2);
 
-		if (useROS)
+		if (config.minimapOnPanel)
 		{
-			Debug.Log("Connecting to ROS master at " + remoteIP);
-			rosClient = new ROSClient(remoteIP);
-			if (enableMyFilter)
-				rosClient.enableFilter(bufferSize);
+			minimapp.transform.localPosition = new Vector3(-0.0581f, 0.1761f, 0.2448f);
+			minimapSide.transform.localPosition = new Vector3(0.0648f, 0.1761f, 0.2448f);
+			minimapp.transform.localEulerAngles = new Vector3(59.356f, 180.0f, 0.0f);
+			minimapSide.transform.localEulerAngles = new Vector3(59.356f, 180.0f, 0.0f);
+		}
+		else
+		{
+			minimapp.transform.localPosition = new Vector3(0.0006f, 0.2793f, 0.215f);
+			minimapp.transform.localEulerAngles = new Vector3(118.342f, 178.058f, -0.8109741f);
+			minimapp.transform.localScale /= 1.2f;
+			minimapSide.transform.localPosition = new Vector3(0.08f, 0.2625f, 0.1992f);
+			minimapSide.transform.localEulerAngles = new Vector3(121.245f, 196.401f, -7.395996f);
+			minimapSide.transform.localScale /= 1.2f;
+		}
+
+
+		/*start ROS*/
+		if (config.useROS)
+		{
+			Debug.Log("Connecting to ROS master at " + config.remoteIP);
+			rosClient = new ROSClient(config.remoteIP);
+			if (config.enableMyFilter)
+				rosClient.enableFilter(config.bufferSize);
 
 			Debug.Log("Connected");
-			rosClient.initSubscriber(subscribingTopic);
-			rosClient.initPublisher(publishingTopic);
+			rosClient.initSubscriber(config.subscribingTopic);
+			rosClient.initPublisher(config.publishingTopic);
 			buttons = new int[11];
 			axes = new float[8];
 		}
+		/*read offset*/
 		string offsetName;
 		if (isServer) offsetName = "StartPos1";
 		else offsetName = "StartPos2";
@@ -127,7 +168,7 @@ public class Paddle : NetworkBehaviour {
 
 	void ROSControl()
 	{
-		if (useROS)
+		if (config.useROS)
 		{
 			OVRInput.Update(); // Has to be called at the beginning to interact with OVRInput.
 
@@ -160,14 +201,14 @@ public class Paddle : NetworkBehaviour {
 			{
 				ROS.Pose pose = rosClient.getPose();
 				Debug.Log(JsonUtility.ToJson(pose));
-				gameObject.transform.position = pose.position.toUnityCoordSys(positionScale);
+				gameObject.transform.position = pose.position.toUnityCoordSys(config.positionScale);
 				if (isServer) gameObject.transform.position += positionOffset;
 				else
 				{
 					Vector3 pos = gameObject.transform.position;
 					gameObject.transform.position = new Vector3(-pos.x, pos.y, -pos.z) + positionOffset;
 				}
-				if (enableRotation)
+				if (config.enableRotation)
 				{
 					gameObject.transform.eulerAngles = pose.orientation.toUnityCoordSys();
 					Debug.Log("Euler: " + gameObject.transform.eulerAngles.ToString());
@@ -195,11 +236,52 @@ public class Paddle : NetworkBehaviour {
 			CmdSpawnBall();
 			ready = false;
 		}
-		transform.Translate (Input.GetAxis ("Horizontal") * speed * Time.deltaTime, Input.GetAxis ("Vertical") * speed * Time.deltaTime, 0f);
+		transform.Translate (Input.GetAxis ("Horizontal") * config.speed * Time.deltaTime, Input.GetAxis ("Vertical") * config.speed * Time.deltaTime, 0f);
 		MinimapControl();
 		ROSControl();
 		
 		CameraControl();
+		if (config.dynamicAdjust)
+		{
+			var minimapp = gameObject.transform.Find("Plane").gameObject;
+			//scale1 = minimapp.transform.localScale;
+			var minimapSide = gameObject.transform.Find("Plane2").gameObject;
+			//scale2 = minimapSide.transform.localScale;
+			//float x = GameObject.Find("MinimapPlane").transform.localScale.x;
+			//float z = GameObject.Find("MinimapPlane").transform.localScale.z;
+			//minimapp.transform.localScale = new Vector3(scale1.x * z * 5.0f, scale1.y, scale1.z * x * 5.0f);
+
+			//x = GameObject.Find("MinimapSidePlane").transform.localScale.x;
+			//z = GameObject.Find("MinimapSidePlane").transform.localScale.z;
+			//minimapSide.transform.localScale = new Vector3(scale1.x * z * 5.0f, scale1.y, scale1.z * x * 5.0f);
+
+
+			float ratio = GameObject.Find("MinimapPlane").transform.localScale.x / GameObject.Find("MinimapPlane").transform.localScale.z;
+			if (ratio < 1) minimapp.transform.localScale = new Vector3(scale1.x, scale1.y, scale1.z * ratio);
+			else minimapp.transform.localScale = new Vector3(scale1.x / ratio, scale1.y, scale1.z);
+			//Debug.Log(ratio);
+			float ratio2 = GameObject.Find("MinimapSidePlane").transform.localScale.x / GameObject.Find("MinimapSidePlane").transform.localScale.z;
+			if (ratio2 < 1) minimapSide.transform.localScale = new Vector3(scale2.x, scale2.y, scale2.z * ratio2);
+			else minimapSide.transform.localScale = new Vector3(scale2.x / ratio2, scale2.y, scale2.z);
+
+			if (config.minimapOnPanel)
+			{
+				minimapp.transform.localPosition = new Vector3(-0.0581f, 0.1761f, 0.2448f);
+				minimapSide.transform.localPosition = new Vector3(0.0648f, 0.1761f, 0.2448f);
+				minimapp.transform.localEulerAngles = new Vector3(59.356f, 180.0f, 0.0f);
+				minimapSide.transform.localEulerAngles = new Vector3(59.356f, 180.0f, 0.0f);
+			}
+			else
+			{
+				minimapp.transform.localPosition = new Vector3(0.0006f, 0.2793f, 0.215f);
+				minimapp.transform.localEulerAngles = new Vector3(118.342f, 178.058f, -0.8109741f);
+				minimapp.transform.localScale /= 1.2f;
+				minimapSide.transform.localPosition = new Vector3(0.08f, 0.2625f, 0.1992f);
+				minimapSide.transform.localEulerAngles = new Vector3(121.245f, 196.401f, -7.395996f);
+				minimapSide.transform.localScale /= 1.2f;
+			}
+		}
+		gameObject.GetComponent<BoxCollider>().center = new Vector3(0.0f, 0.0f, 3.0f * colliderDist);
 	}
 }
 

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Ball : MonoBehaviour {
 
-	public float speed = 5f;
+	public float speed = 0.0f;
 	//private int count2;
 	//public Text winText;
 	public Text countText;
@@ -15,7 +15,9 @@ public class Ball : MonoBehaviour {
 	public AudioClip wallSound;
 	public AudioClip paddleSound;
 	public float vol = 0.5f;
+	public bool dosometest = false;
 
+	private Vector3 ballPos;
 	private AudioSource source;
 
 	// Use this for initialization
@@ -28,8 +30,10 @@ public class Ball : MonoBehaviour {
 		GetComponent<Rigidbody> ().velocity = new Vector3 (speed * sx, speed * sy, speed * sz);
 		//winText.text = "";
 		count1 = 0;*/
-
+		speed = GameObject.Find("Config").GetComponent<SceneConfiguration>().speed;
 		//SetCountText ();
+		Vector3 Pos = (GameObject.Find("StartPos1").GetComponent<Transform>().position + GameObject.Find("StartPos2").GetComponent<Transform>().position) / 2.0f;
+		ballPos = new Vector3(Pos.x, Pos.y + 0.2f, Pos.z);
 	}
 
 	private void Awake()
@@ -47,28 +51,53 @@ public class Ball : MonoBehaviour {
 	void OnTriggerEnter(Collider other)
 	{
 		
-		if(other.gameObject.CompareTag ("goal1")) 
+		if (other.gameObject.CompareTag("goal"))
 		{
-			
-			//count1 = count1 + 1;
-			GetComponent<Rigidbody> ().position = Vector3.zero;
-			//SetCountText ();
-
+			gameObject.GetComponent<Rigidbody>().position = ballPos;
+			source.PlayOneShot(goalSound, vol);
+			float sx = Random.Range(-1.0f, 1.0f);
+			float sy = Random.Range(-(float)System.Math.Sqrt(1 - sx * sx), (float)System.Math.Sqrt(1 - sx * sx));
+			//float sz = Random.Range(-0.5f, 0.5f);
+			float sz = ((Random.Range(0.0f, 1.0f) > 0.5f) ? -1.0f : 1.0f) * (float)System.Math.Sqrt(1 - sx * sx - sy * sy);
+			if (dosometest)
+			{
+				sx = 0.0f;
+				sy = 0.0f;
+				sz = -1.0f;
+			}
+			gameObject.GetComponent<Rigidbody>().velocity = new Vector3(speed * sx, speed * sy, speed * sz);
 		}
-		if (other.gameObject.CompareTag ("goal2")) 
+		else if (other.gameObject.CompareTag("wall"))
 		{
-			//count2 = count2 + 1;
-			GetComponent<Rigidbody> ().position = Vector3.zero;
+			source.PlayOneShot(wallSound, vol);
+			Vector3 v = gameObject.GetComponent<Rigidbody>().velocity;
+			gameObject.GetComponent<Rigidbody>().velocity = new Vector3(v.x, -v.y, v.z);
 		}
-		source.PlayOneShot(goalSound, vol);
-		float sx = Random.Range(-1.0f, 1.0f);
-		float sy = Random.Range(-(float)System.Math.Sqrt(1-sx*sx), (float)System.Math.Sqrt(1 - sx * sx));
-		//float sz = Random.Range(-0.5f, 0.5f);
-		float sz = ((Random.Range(0.0f, 1.0f)>0.5f)?-1.0f:1.0f) *(float)System.Math.Sqrt(1 - sx * sx - sy * sy);
-		//float sx = 1.0f;
-		//float sy = 1.0f;
-		//float sz = -1.0f;
-		gameObject.GetComponent<Rigidbody>().velocity = new Vector3(speed * sx, speed * sy, speed * sz);
+		else if (other.gameObject.CompareTag("wall2"))
+		{
+			source.PlayOneShot(wallSound, vol);
+			Vector3 v = gameObject.GetComponent<Rigidbody>().velocity;
+			gameObject.GetComponent<Rigidbody>().velocity = new Vector3(v.x, -v.y, v.z);
+		}
+		else if (other.gameObject.CompareTag("wall5"))
+		{
+			source.PlayOneShot(wallSound, vol);
+			Vector3 v = gameObject.GetComponent<Rigidbody>().velocity;
+			gameObject.GetComponent<Rigidbody>().velocity = new Vector3(-v.x, v.y, v.z);
+		}
+		else if (other.gameObject.CompareTag("wall6"))
+		{
+			source.PlayOneShot(wallSound, vol);
+			Vector3 v = gameObject.GetComponent<Rigidbody>().velocity;
+			gameObject.GetComponent<Rigidbody>().velocity = new Vector3(-v.x, v.y, v.z);
+		}
+		else if (other.gameObject.CompareTag("paddle"))
+		{
+			source.PlayOneShot(paddleSound, vol);
+			Vector3 v = gameObject.GetComponent<Rigidbody>().velocity;
+			gameObject.GetComponent<Rigidbody>().velocity = new Vector3(v.x, v.y, -v.z);
+		}
+		
 	}
 
 	private void OnCollisionEnter(Collision collision)
