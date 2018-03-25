@@ -1,50 +1,46 @@
 fileFormatVersion: 2
-guid: ae14bb05cc65fc441b4a08663446f116
+guid: 0847df8f9bf81b044bc8d3c146925930
 timeCreated: 1510698763
 licenseType: Free
 PluginImporter:
+  externalObjects: {}
   serializedVersion: 2
   iconMap: {}
   executionOrder: {}
   isPreloaded: 0
   isOverridable: 0
   platformData:
-    data:
-      first:
-        '': Editor
-      second:
-        enabled: 0
-        settings:
-          CPU: X86
-          OS: Windows
-    data:
-      first:
-        Android: Android
-      second:
-        enabled: 0
-        settings:
-          CPU: ARMv7
-    data:
-      first:
-        Any: 
-      second:
-        enabled: 0
-        settings: {}
-    data:
-      first:
-        Editor: Editor
-      second:
-        enabled: 1
-        settings:
-          CPU: X86
-          DefaultValueInitialized: true
-          OS: Windows
-    data:
-      first:
-        Standalone: Win
-      second:
-        enabled: 1
-        settings: {}
+  - first:
+      '': Editor
+    second:
+      enabled: 0
+      settings:
+        CPU: X86
+        OS: Windows
+  - first:
+      Android: Android
+    second:
+      enabled: 0
+      settings:
+        CPU: ARMv7
+  - first:
+      Any: 
+    second:
+      enabled: 0
+      settings: {}
+  - first:
+      Editor: Editor
+    second:
+      enabled: 1
+      settings:
+        CPU: X86
+        DefaultValueInitialized: true
+        OS: Windows
+  - first:
+      Standalone: Win
+    second:
+      enabled: 1
+      settings: {}
   userData: 
   assetBundleName: 
   assetBundleVariant: 
