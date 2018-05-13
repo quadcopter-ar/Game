@@ -35,9 +35,10 @@ namespace ROS
 	
 	public UnityEngine.Vector3 toYUp(UnityEngine.Vector3 pos)
         {
-            // convert to Y-up coord. sys.
-            return new UnityEngine.Vector3(pos.x, pos.z, pos.y);
-        }
+			// convert to Y-up coord. sys.
+			// return new UnityEngine.Vector3(pos.x, pos.z, pos.y);
+			return new UnityEngine.Vector3(pos.y, pos.x, pos.z);
+		}
 
         public UnityEngine.Vector3 toUnityCoordSys(UnityEngine.Vector3 scale)
         {
