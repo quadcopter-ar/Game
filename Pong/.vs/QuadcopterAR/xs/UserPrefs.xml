@@ -1,0 +1,20 @@
+﻿<Properties StartupConfiguration="{9E26E09B-1AEA-3D5E-809F-A6D1F0AB1753}|">
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Game/Scripts/Ball.cs">
+    <Files>
+      <File FileName="Assets/Game/Scripts/Ball.cs" Line="72" Column="17" />
+      <File FileName="Assets/Game/Scripts/Paddle.cs" Line="126" Column="38" />
+      <File FileName="Assets/Game/Scripts/CamMovement.cs" Line="1" Column="1" />
+      <File FileName="Assets/Game/Scripts/SceneConfiguration.cs" Line="29" Column="26" />
+      <File FileName="Assets/Framework/Scripts/OculusRiftTouchController.cs" Line="71" Column="20" />
+      <File FileName="Assets/Framework/OVR/Scripts/OVRManager.cs" Line="822" Column="1" />
+      <File FileName="Assets/Framework/OVR/Scripts/OVRPlugin.cs" Line="1315" Column="35" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+</Properties>
