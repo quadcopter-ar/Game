@@ -10,7 +10,8 @@ public class SceneConfiguration : MonoBehaviour {
 	public bool singlePlayer = false;
 	public bool dynamicAdjust = false;
 	public bool minimapOnPanel = false;
-	
+	// public string [] coord_frame = new string[] { "Simulation", "3DR" };
+
 	//public GameObject gameObject = ;
 	[Header("ROS")]
 	public Vector3 positionScale;
@@ -85,7 +86,7 @@ public class SceneConfiguration : MonoBehaviour {
 		GameObject.Find("goalindicator2").GetComponent<Transform>().localScale = new Vector3(0.01f, 0.04f, width / 3.0f);
 
 		//go pro video setting
-		GameObject.Find("GoProPrefab").transform.Find("GoPro").GetComponent<Transform>().localPosition = new Vector3(0.0f, 0.0f, 3.0f * videoDistance);
+		GameObject.Find("GoProPrefab").transform.Find("GoPro").GetComponent<Transform>().localPosition = new Vector3(0.0f, 0.0f, 10.0f * videoDistance);
 	}
 	
 	// Update is called once per frame
@@ -124,7 +125,7 @@ public class SceneConfiguration : MonoBehaviour {
 			sideMinimapTexture.width = (int)(width * 100);
 
 			//go pro video setting
-			GameObject.Find("GoProPrefab").transform.Find("GoPro").GetComponent<Transform>().localPosition = new Vector3(0.0f, 0.0f, 3.0f * videoDistance);
+			GameObject.Find("GoProPrefab").transform.Find("GoPro").GetComponent<Transform>().localPosition = new Vector3(0.0f, 0.0f, 10.0f * videoDistance);
 		}
 	}
 }
